@@ -1,12 +1,27 @@
 {
   "name": "task_app",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npm run mongodb.js",
+    "dev": "nodemon mongodb.js -e js"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "mongodb": "^3.5.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DavidWalshe93/Task_App.git"
+  },
+  "bugs": {
+    "url": "https://github.com/DavidWalshe93/Task_App/issues"
+  },
+  "homepage": "https://github.com/DavidWalshe93/Task_App#readme",
+  "description": ""
 }
