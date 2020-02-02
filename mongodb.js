@@ -25,20 +25,41 @@ MongoClient.connect(connectionURL, { useNewUrlParser: true, useUnifiedTopology: 
     //     console.log(result.ops)
     // });
 
-    db.collection("users", ).insertMany([
+    // db.collection("users", ).insertMany([
+    //     {
+    //         name: "Ryan",
+    //         age: 21
+    //     }, {
+    //         name: "Grace",
+    //         age: 26
+    //     }
+    //     ], (error, result) => {
+    //     if (error) {
+    //         return console.log(result.ops);
+    //     }
+    //
+    //     console.log(result.ops)
+    // })
+
+    db.collection("tasks").insertMany([
         {
-            name: "Ryan",
-            age: 21
-        }, {
-            name: "Grace",
-            age: 26
+            description: "This is task 1",
+            completed: false
+        },
+        {
+            description: "This is task 2",
+            completed: true
+        },
+        {
+            description: "This is task 3",
+            completed: false
         }
-        ], (error, result) => {
+    ], (error, result) => {
         if (error) {
-            return console.log(result.ops);
+            return console.log("Error: " + result.ops)
         }
 
-        console.log(result.ops)
+        console.log(result.ops);
     })
 });
 
