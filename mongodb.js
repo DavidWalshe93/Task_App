@@ -3,10 +3,6 @@ const {MongoClient, ObjectID } = require("mongodb");
 const connectionURL = "mongodb://127.0.0.1:27017";
 const databaseName = "task-manager";
 
-const id = new ObjectID();
-console.log(id);
-console.log(id.getTimestamp() );
-
 MongoClient.connect(connectionURL, { useNewUrlParser: true, useUnifiedTopology: true }, (error, client) => {
     if(error) {
         return console.log("Unable to connect to database")
@@ -15,54 +11,31 @@ MongoClient.connect(connectionURL, { useNewUrlParser: true, useUnifiedTopology: 
     // Get database handle
     const db = client.db(databaseName);
 
-    // // Add a document to a collection
-    // db.collection("users").insertOne({
-    //     _id: id,
-    //     name: "Dave",
-    //     age: 26
-    // }, (error, result) => {
-    //     if (error) {
-    //         return console.log("Unable to insert user")
-    //     }
-    //     console.log(result.ops)
-    // });
+    db.collection("users").findOne({ _id: new ObjectID("5e3743d766fefc193c4c863e")}, (error, user) => {
+        if (error) {
+            return console.log("Unable to fetch")
+        }
 
-    // db.collection("users", ).insertMany([
-    //     {
-    //         name: "Ryan",
-    //         age: 21
-    //     }, {
-    //         name: "Grace",
-    //         age: 26
-    //     }
-    //     ], (error, result) => {
-    //     if (error) {
-    //         return console.log(result.ops);
-    //     }
-    //
-    //     console.log(result.ops)
-    // })
+        console.log(user)
+    });
 
-    // db.collection("tasks").insertMany([
-    //     {
-    //         description: "This is task 1",
-    //         completed: false
-    //     },
-    //     {
-    //         description: "This is task 2",
-    //         completed: true
-    //     },
-    //     {
-    //         description: "This is task 3",
-    //         completed: false
-    //     }
-    // ], (error, result) => {
-    //     if (error) {
-    //         return console.log("Error: " + result.ops)
-    //     }
-    //
-    //     console.log(result.ops);
-    // })
+    // Find and print all the documents in user where the age is 27.
+    db.collection("users").find({ age: 26 }).toArray((error, users) => {
+        console.log(users)
 
+    });
+
+    // Find how many documents match the age of 26 in the users collection.
+    db.collection("users").find({ age: 26 }).count((error, count) => {
+        console.log(count)
+    });
+
+    db.collection("tasks").findOne({_id: new ObjectID("5e37449b4e7f154a00c9a1ac")}, (error, task) => {
+        console.log(task)
+    });
+
+    db.collection("tasks").find({completed: false}).toArray((error, tasks) => {
+        console.log(tasks)
+    });
 });
 
