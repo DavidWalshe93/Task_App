@@ -11,14 +11,18 @@ MongoClient.connect(connectionURL, { useNewUrlParser: true, useUnifiedTopology: 
     // Get database handle
     const db = client.db(databaseName);
 
-    db.collection("tasks").updateMany({
-        completed: false
-    }, {
-        $set: {
-            completed: true
-        }
+    db.collection("users").deleteMany({
+        age: 26
     }).then((result) => {
-        console.log(result.modifiedCount)
+        console.log(result)
+    }).catch((error) => {
+        console.log(error)
+    });
+
+    db.collection("tasks").deleteOne({
+        description: "This is task 1"
+    }).then((result) => {
+        console.log(result.deletedCount)
     }).catch((error) => {
         console.log(error)
     })
