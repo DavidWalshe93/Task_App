@@ -14,8 +14,8 @@ MongoClient.connect(connectionURL, { useNewUrlParser: true, useUnifiedTopology: 
     db.collection("users").updateOne({
         _id: new ObjectID("5e3741433cf32837842e1249")
     }, {
-       $set: {
-           age: 27
+       $inc: {
+           age: 1
        }
     }).then((result) => {
         console.log(result);
