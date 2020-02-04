@@ -63,6 +63,7 @@ app.post("/tasks", (req, res) => {
     })
 });
 
+// Return all tasks.
 app.get("/tasks", (req, res) => {
 
     Task.find({}).then((users) => {
@@ -72,6 +73,7 @@ app.get("/tasks", (req, res) => {
     })
 });
 
+// Return a task on its id.
 app.get("/tasks/:id", (req, res) => {
 
     const _id = req.params.id;
