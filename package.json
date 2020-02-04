@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "npm run mongodb.js",
-    "dev": "nodemon mongodb.js -e js"
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js -e js"
   },
   "keywords": [],
   "author": "",
