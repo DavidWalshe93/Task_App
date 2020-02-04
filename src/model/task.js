@@ -1,4 +1,5 @@
 // Created by David Walshe on 04/02/2020
+// Contains mongoose model for Task.
 
 const mongoose = require("mongoose");
 

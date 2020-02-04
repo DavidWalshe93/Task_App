@@ -1,9 +1,8 @@
 // Created by David Walshe on 04/02/2020
+// Contains mongoose model for User.
 
 const mongoose = require("mongoose");
 const validator = require("validator");
-
-// Mongoose Model for User
 
 const User = mongoose.model("User", {
     name: {
