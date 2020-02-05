@@ -11,22 +11,19 @@ app.use(express.json());
 app.use(userRouter);
 app.use(taskRouter);
 
-const bcrypt = require("bcryptjs");
-
-const myFunc = async () => {
-  const password = "HELLO WORLD";
-  const hashedPassword = await bcrypt.hash(password, 8);
-
-  console.log(password);
-  console.log(hashedPassword);
-
-  const isMatch = await bcrypt.compare("HELLO WORLD", hashedPassword);
-  console.log(isMatch);
-};
-
-myFunc();
-
 // Start server and bring up port.
 app.listen(port, () => {
   console.log("Server is up on port " + port)
 });
+
+const jwt = require("jsonwebtoken");
+
+const myFunc = async () => {
+  const token = jwt.sign({_id: "abc123"}, "thisismytoken", {expiresIn: '1 seconds'});
+  console.log(token);
+
+  const data = jwt.verify(token, "thisismytoken");
+  console.log(data)
+};
+
+myFunc();
