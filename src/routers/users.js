@@ -1,6 +1,7 @@
 // Created by David Walshe on 05/02/2020
 
 const express = require("express");
+const jwt = require("jsonwebtoken");
 const User = require("../model/user");
 
 const router = new express.Router();
@@ -20,7 +21,8 @@ router.post("/users", async (req, res) => {
 router.post("/users/login", async (req, res) => {
     try {
         const user = await User.findByCredentials(req.body.email, req.body.password);
-        res.send(user)
+        const token = await user.generateAuthToken();
+        res.send({user, token})
     } catch (e) {
         res.status(400).send()
     }
