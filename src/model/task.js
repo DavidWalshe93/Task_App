@@ -14,6 +14,10 @@ const taskSchema = new mongoose.Schema({
     completed: {
         type: Boolean,
         default: true
+    },
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true
     }
 });
 
