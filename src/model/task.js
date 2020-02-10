@@ -20,6 +20,8 @@ const taskSchema = new mongoose.Schema({
         required: true,
         ref: 'User'
     }
+}, {
+    timestamps: true
 });
 
 const Task = mongoose.model("Task", taskSchema);
