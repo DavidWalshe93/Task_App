@@ -128,4 +128,20 @@ router.delete("/users/me/avatar", auth, async (req, res) => {
     res.send()
 });
 
+
+// Allows users or end-point devices to retrieve avatar image for a user.
+router.get('/users/:id/avatar', async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+
+        if (!user || !user.avatar) {
+            return new Error("No user or avatar associated with user")
+        }
+
+        res.set('Content-Type', 'image/jpg').send(user.avatar);
+    } catch (e) {
+        res.status(404).send()
+    }
+});
+
 module.exports = router;
