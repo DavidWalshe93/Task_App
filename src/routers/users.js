@@ -9,8 +9,19 @@ const multer = require('multer');
 
 const router = new express.Router();
 
+// Sets up upload constraints for avatar
 const upload = multer({
-    dest: 'images'
+    dest: 'images',
+    limits: {
+        fileSize: 1_000_000
+    },
+    fileFilter(req, file, callback) {
+        if (!file.originalname.match(/\.(png|jpg|jpeg)$/)) {
+            return callback(new Error('The file must be in the format: ".png", ".jpg" or ".jpeg"'))
+        }
+
+        callback(undefined, true);
+    }
 });
 
 // Create a user
