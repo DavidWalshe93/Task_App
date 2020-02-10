@@ -11,7 +11,6 @@ const router = new express.Router();
 
 // Sets up upload constraints for avatar
 const upload = multer({
-    dest: 'images',
     limits: {
         fileSize: 1_000_000
     },
@@ -78,6 +77,8 @@ router.post("/users/logoutAll", auth, async (req, res) => {
 
 // Image upload
 router.post("/users/me/avatar", auth, upload.single('avatar'), async (req, res) => {
+    req.user.avatar = req.file.buffer;
+    await req.user.save();
     res.send()
 }, (error, req, res, next) => {
     res.status(400).send({
