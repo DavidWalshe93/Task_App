@@ -2,10 +2,12 @@
 
 const express = require("express");
 const jwt = require("jsonwebtoken");
+const multer = require('multer');
+const sharp = require('sharp')
 const User = require("../model/user");
 const auth = require("../middleware/auth");
 const maintenance = require("../middleware/maintenance");
-const multer = require('multer');
+
 
 const router = new express.Router();
 
@@ -77,7 +79,8 @@ router.post("/users/logoutAll", auth, async (req, res) => {
 
 // Image upload
 router.post("/users/me/avatar", auth, upload.single('avatar'), async (req, res) => {
-    req.user.avatar = req.file.buffer;
+    const buffer = await sharp(req.file.buffer).resize({width: 250, height: 250}).png().toBuffer();
+    req.user.avatar = buffer;
     await req.user.save();
     res.send()
 }, (error, req, res, next) => {
@@ -138,7 +141,7 @@ router.get('/users/:id/avatar', async (req, res) => {
             return new Error("No user or avatar associated with user")
         }
 
-        res.set('Content-Type', 'image/jpg').send(user.avatar);
+        res.set('Content-Type', 'image/png').send(user.avatar);
     } catch (e) {
         res.status(404).send()
     }
