@@ -78,11 +78,11 @@ router.post("/users/logoutAll", auth, async (req, res) => {
 
 // Image upload
 router.post("/users/me/avatar", upload.single('avatar'), async (req, res) => {
-    try {
-        res.send()
-    } catch (e) {
-        res.status(500).send()
-    }
+    res.send()
+}, (error, req, res, next) => {
+    res.status(400).send({
+        error: error.message
+    })
 });
 
 // Retrieve all Users
