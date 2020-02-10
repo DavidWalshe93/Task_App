@@ -5,8 +5,13 @@ const jwt = require("jsonwebtoken");
 const User = require("../model/user");
 const auth = require("../middleware/auth");
 const maintenance = require("../middleware/maintenance");
+const multer = require('multer');
 
 const router = new express.Router();
+
+const upload = multer({
+    dest: 'images'
+});
 
 // Create a user
 router.post("/users", async (req, res) => {
@@ -54,6 +59,15 @@ router.post("/users/logoutAll", auth, async (req, res) => {
     try {
         req.user.tokens = [];
         await req.user.save();
+        res.send()
+    } catch (e) {
+        res.status(500).send()
+    }
+});
+
+// Image upload
+router.post("/users/me/avatar", upload.single('avatar'), async (req, res) => {
+    try {
         res.send()
     } catch (e) {
         res.status(500).send()
