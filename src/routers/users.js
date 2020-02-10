@@ -121,4 +121,11 @@ router.delete("/users/me", auth, async (req, res) => {
     }
 });
 
+// Delete user's avatar image.
+router.delete("/users/me/avatar", auth, async (req, res) => {
+    req.user.avatar = undefined;
+    req.user.save();
+    res.send()
+});
+
 module.exports = router;
