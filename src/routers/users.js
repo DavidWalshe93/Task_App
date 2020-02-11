@@ -7,6 +7,7 @@ const sharp = require('sharp')
 const User = require("../model/user");
 const auth = require("../middleware/auth");
 const maintenance = require("../middleware/maintenance");
+const {sendWelcomeEmail, sendExitEmail} = require('../emails/account');
 
 
 const router = new express.Router();
@@ -27,12 +28,12 @@ const upload = multer({
 
 // Create a user
 router.post("/users", async (req, res) => {
-    const newUser = new User(req.body);
+    const user = new User(req.body);
 
     try {
-        await newUser.save();
+        await user.save();
+        sendWelcomeEmail(user.email, user.name);
         // Send back a login token for the new user.
-        const user = await User.findByCredentials(req.body.email, req.body.password);
         const token = await user.generateAuthToken();
         res.status(201).send({user, token});
     } catch (e) {
@@ -89,7 +90,7 @@ router.post("/users/me/avatar", auth, upload.single('avatar'), async (req, res) 
     })
 });
 
-// Retrieve all Users
+// Retrieve User account
 router.get("/users/me", auth, async (req, res) => {
     res.send(req.user)
 });
@@ -118,6 +119,7 @@ router.patch("/users/me", auth, async (req, res) => {
 router.delete("/users/me", auth, async (req, res) => {
     try {
         await req.user.remove();
+        sendExitEmail(req.user.email, req.user.name);
         res.send(req.user);
     } catch (e) {
         res.status(500).send(e)
