@@ -4,3 +4,4 @@
 /config/dev.env
 /tests/temp.js
 /tests/math.test.js
+/config/test.env

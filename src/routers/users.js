@@ -15,7 +15,7 @@ const router = new express.Router();
 // Sets up upload constraints for avatar
 const upload = multer({
     limits: {
-        fileSize: 1_000_000
+        fileSize: 1000000
     },
     fileFilter(req, file, callback) {
         if (!file.originalname.match(/\.(png|jpg|jpeg)$/)) {
