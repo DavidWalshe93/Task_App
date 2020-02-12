@@ -31,6 +31,7 @@ router.post("/users", async (req, res) => {
     const user = new User(req.body);
 
     try {
+        console.log("HERE")
         await user.save();
         sendWelcomeEmail(user.email, user.name);
         // Send back a login token for the new user.

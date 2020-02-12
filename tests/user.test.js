@@ -1,30 +1,13 @@
 // Created by David Walshe on 11/02/2020
 
 const request = require("supertest");
-const jwt = require("jsonwebtoken");
-const mongoose = require("mongoose");
 const app = require("../src/app");
 const User = require("../src/model/user");
 
+const {userOne, userOneId, setupDatabase} = require("./fixtures/db");
 
-const userOneId = new mongoose.Types.ObjectId();
-console.log(process.env.JWT_SECRET);
-const userOne = {
-    _id: userOneId,
-    name: "Bob",
-    email: "bob@example.ie",
-    password: "qwerty2000",
-    tokens: [{
-        token: jwt.sign({_id: userOneId}, process.env.JWT_SECRET)
-    }]
-};
 
-console.log(userOne);
-
-beforeEach(async () => {
-    await User.deleteMany();
-    await new User(userOne).save()
-});
+beforeEach(setupDatabase);
 
 afterEach(() => {
 
@@ -42,7 +25,6 @@ test("Should signup a new user", async () => {
     expect(user).not.toBeNull();
 
     // Assertions about the
-    console.log(response.body);
     expect(response.body).toMatchObject({
         user: {
             name: "John",
@@ -95,7 +77,7 @@ test("Should delete user profile", async () => {
         .delete("/users/me")
         .set("Authorization", `Bearer ${userOne.tokens[0].token}`)
         .send()
-        .expect(200)
+        .expect(200);
 
     const user = await User.findById(userOneId);
     expect(user).toBeNull();
@@ -106,4 +88,38 @@ test("Should delete not delete user profile, unauthorised", async () => {
         .delete("/users/me")
         .send()
         .expect(401)
+});
+
+test("Should upload avatar image", async () => {
+    await request(app)
+        .post("/users/me/avatar")
+        .set("Authorization", `Bearer ${userOne.tokens[0].token}`)
+        .attach("avatar", "tests/fixtures/profile-pic.jpg")
+        .expect(200)
+    const user = await User.findById(userOneId);
+    expect(user.avatar).toEqual(expect.any(Buffer))
+});
+
+test("Should update valid user fields", async () => {
+    const response = await request(app)
+        .patch("/users/me/")
+        .set("Authorization", `Bearer ${userOne.tokens[0].token}`)
+        .send({
+            age: 24,
+            name: "Luke"
+        }).expect(200);
+
+    expect(response.body.age).toBe(24);
+    expect(response.body.name).toBe("Luke");
+});
+
+test("Should not update invalid user fields", async () => {
+    const response = await request(app)
+        .patch("/users/me")
+        .set("Authorization", `Bearer ${userOne.tokens[0].token}`)
+        .send({
+            location: "Hello World",
+            age: 24,
+            name: "Luke"
+        }).expect(400);
 });
